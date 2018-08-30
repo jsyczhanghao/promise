@@ -13,8 +13,7 @@ function b(data){return data};
 function Promise(fn){
     this.state = STATES.PENDING;
     this._ = [];
-    this._finally = b;
-    this._ = [];
+    this._finally = b; //待添加
     fn(this.emitResolve.bind(this), this.emitReject.bind(this));
 }
 
