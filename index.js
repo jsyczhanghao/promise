@@ -1,4 +1,4 @@
-//var Promise = require('./lib');
+var Promise = require('./lib');
 
 var p = new Promise((resolve, reject) => {
     resolve(33);
