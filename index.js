@@ -1,42 +1,37 @@
 var Promise = require('./lib');
 
 var p = new Promise((resolve, reject) => {
-    resolve(33);
+    throw new Error('first error');
+    resolve(1);
 });
 
 var d;
 
 var b = p.then((data) => {
     return d = new Promise((resolve, reject) => {
-        console.log('3333')
-        resolve(344);
+        console.log('2')
+        resolve(2);
     }).then((data) => {
-        console.log(data);
+        console.log('res ', data);
         return new Promise((resolve, reject) => {
-            reject('3333');
-        }).then(() => {}, () => {
-            console.log('reject');
-            return 333;
-        })
+            throw new Error('error');
+            reject(3);
+        });
     });
 });
 
 var c = b.then((data) => {
-    console.log(data, 333);
-}, function(){
-    console.log('1233reject');
-    return 123;
-});
-
-c.then((data) => {
-    console.log(data, 'lalal')
-}).then((data) => {
-    console.log('fdjkfdjsk');
+    console.log('res ', data);
 })
 
-// setTimeout(() => {
-//     console.log(b, c, b === c, b === d);
-// }, 100)
+c.then((data) => {
+    console.log('res ', data)
+    return new Promise((resolve, reject) => {
+        reject(5);
+    });
+}).catch((data) => {
+    console.log('catch', data)
+});
 
 Promise.all([
     new Promise(function(resolve){
@@ -59,4 +54,18 @@ Promise.all([
     console.log(4, args);
 }, () => {
     console.log(5);
+});
+
+Promise.race([
+    new Promise(function(resolve){
+        setTimeout(function(){ resolve(1)});
+    }),
+
+    new Promise(function(resolve, reject){
+        reject(2)
+    })
+]).then(function(data){
+    console.log('resolve ', data);
+}, function(data){
+    console.log('reject ', data);
 })
